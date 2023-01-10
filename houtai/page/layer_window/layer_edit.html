@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="../../layui-v2.5.7/layui-v2.5.7/layui/css/layui.css">
+	</head>
+	<body>
+		  <div class="layui-form-item" style="margin-top: 0.625rem;">
+		    <label class="layui-form-label">商品名称</label>
+		    <div class="layui-input-block" style="width: 18.75rem;">
+		      <input type="text" id="title" name="title" required  lay-verify="required" placeholder="请输入商品名称" autocomplete="off" class="layui-input">
+		    </div>
+		  </div>
+		  <div class="layui-upload" style="margin-left: 35px;">
+		    <div class="layui-upload">
+		      <div class="layui-upload-list">
+		        预览图： <img class="layui-upload-img" id="image_shop" width="220" height="185" style="">
+		        <p id="image_link"></p>
+		  		<div style="height: 10px;"></div>
+		  				<button type="button" class="layui-btn" id="image" >重新上传图片</button>
+		      </div>
+		    </div>  
+		  </div>    
+		  <div class="layui-form-item layui-form-text">
+		    <label class="layui-form-label">商品描述</label>
+		    <div class="layui-input-block">
+		      <textarea name="desc" id="desc" placeholder="请输入内容" class="layui-textarea"></textarea>
+		    </div>
+		  </div>
+		  <div class="layui-form-item">
+		    <label class="layui-form-label">价格(元)</label>
+		    <div class="layui-input-block">
+		      <input type="text" id="price"  style="width: 150px;" name="title" required  lay-verify="required" placeholder="请输入商品价格" autocomplete="off" class="layui-input">
+			</div>
+			
+		  </div>
+	</body>
+	
+	<script src="../../layui-v2.5.7/layui-v2.5.7/layui/layui.js"></script>
+	<script src="../../js/upload_img.js"></script>
+	<script>
+	//Demo
+	layui.use('form', function(){
+	  var form = layui.form;
+	  //监听提交
+	  form.on('submit(formDemo)', function(data){
+	    layer.msg(JSON.stringify(data.field));
+	    return false;
+	  });
+	});
+	</script>
+</html>

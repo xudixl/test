@@ -1,0 +1,301 @@
+<!-- 轮播图管理 -->
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>农产总后台</title>
+		<link rel="stylesheet" href="./layui-v2.5.7/layui-v2.5.7/layui/css/layui.css">
+		<script src="js/vue.js"></script>
+		<script src="js/vue.min.js"></script>
+	</head>
+	<style type="text/css">
+		/* 设置layui表格高度 */
+		.layui-table-cell {
+			height: 50px;
+			line-height: 50px;
+		}
+	</style>
+	<body>
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header">
+				<div class="layui-logo">农产总后台</div>
+				<!-- 头部区域（可配合layui已有的水平导航） -->
+				<ul class="layui-nav layui-layout-left">
+					<li class="layui-nav-item"><a href="">控制台</a></li>
+					<li class="layui-nav-item"><a href="">商品管理</a></li>
+					<li class="layui-nav-item"><a href="">用户</a></li>
+					<li class="layui-nav-item">
+						<a href="javascript:;">其它系统</a>
+						<dl class="layui-nav-child">
+							<dd><a href="">邮件管理</a></dd>
+							<dd><a href="">消息管理</a></dd>
+							<dd><a href="">授权管理</a></dd>
+						</dl>
+					</li>
+				</ul>
+				<ul class="layui-nav layui-layout-right">
+					<li class="layui-nav-item">
+						<a href="javascript:;">
+							<img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+							贤心
+						</a>
+						<dl class="layui-nav-child">
+							<dd><a href="">基本资料</a></dd>
+							<dd><a href="">安全设置</a></dd>
+						</dl>
+					</li>
+					<li class="layui-nav-item"><a href="">退了</a></li>
+				</ul>
+			</div>
+
+			<div class="layui-side layui-bg-black">
+				<div class="layui-side-scroll">
+					<!-- 左侧导航区域（可配合layui已有的垂直导航） -->
+					<ul class="layui-nav layui-nav-tree" lay-filter="test">
+						<li class="layui-nav-item layui-nav-itemed">
+							<a class="" href="javascript:;">所有商品</a>
+							<dl class="layui-nav-child">
+								<dd><a href="index.html">推荐商品管理</a></dd>
+								<dd><a href="./page/user/user_page.html">用户管理</a></dd>
+								<dd style="background-color: #009688;"><a href="slider_page.html">轮播图</a></dd>
+								<dd><a href="./page/category/category_manager.html">商品分类管理</a></dd>
+							</dl>
+						</li>
+						<li class="layui-nav-item">
+							<a href="javascript:;">解决方案</a>
+							<dl class="layui-nav-child">
+								<dd><a href="javascript:;">列表一</a></dd>
+								<dd><a href="javascript:;">列表二</a></dd>
+								<dd><a href="">超链接</a></dd>
+							</dl>
+						</li>
+						<li class="layui-nav-item"><a href="">云市场</a></li>
+						<li class="layui-nav-item"><a href="">发布商品</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="layui-body">
+				<!-- 内容主体区域 -->
+				<!-- 轮播图片管理 -->
+				<div style="margin: 0 50px 0 15px;">
+					<table class="layui-hide" id="slider" lay-filter="slider"></table>
+				</div>
+
+				<!--上传图片-->
+				<fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+					<legend>添加新轮播图片</legend>
+				</fieldset>
+
+				<div class="layui-upload" style="margin: 20px 20px;text-align: start;">
+					<div class="layui-upload-list" style="">
+						预览图： <img class="layui-upload-img" id="slider_image_link" width="220" height="185" src="">
+						<p id="slider_link_show"></p>
+					</div>
+					<div style="margin-left: 100px;">
+						<button type="button" class="layui-btn" id="upload_image">上传新图片</button>
+						<button type="button" class="layui-btn" id="add">
+							<i class="layui-icon">&#xe608;</i> 添加
+						</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="layui-footer">
+				<!-- 底部固定区域 -->
+				© 127.0.0.1 - special_agricultural_products
+			</div>
+		</div>
+	</body>
+	<script src="./layui-v2.5.7/layui-v2.5.7/layui/layui.js"></script>
+	<script>
+		//JavaScript代码区域
+		layui.use('element', function() {
+			var element = layui.element;
+		});
+	</script>
+	<script src="./js/slidler_image.js"></script>
+	<!-- 行操作js -->
+	<script type="text/html" id="barDemo">
+		<a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+		<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+	</script>
+
+	<!-- 请求轮播图数据 -->
+	<script>
+		layui.use('table', function() {
+			var table = layui.table;
+			table.render({
+				elem: '#slider',
+				url: 'http://127.0.0.1:1010/api/slider.php',
+				toolbar: '#toolbarDemo',
+				title: '轮播图数据表',
+				totalRow: true,
+				cols: [
+					[{
+						type: 'checkbox',
+						fixed: 'left'
+					}, {
+						field: 'id',
+						title: '图片ID',
+						width: 120,
+						fixed: 'left',
+						unresize: true,
+						sort: true,
+						totalRowText: '合计'
+					}, {
+						field: 'name',
+						title: '轮播图路径'
+					}, {
+						field: 'name',
+						title: '轮播图',
+						align: 'center',
+						templet: function dataURLtoFile(d) {
+							var img = "<img src=" + '"' + "http://127.0.0.1:1010/"+d.name + '"' +
+								"style='width:50px;height:50px;'/>";
+							return img;
+						}
+					}, {
+						fixed: 'right',
+						title: '操作',
+						toolbar: '#barDemo',
+						width: 150
+					}]
+				],
+				page: false,
+				id: 'slider',
+				response: {
+					statusCode: 200 //重新规定成功的状态码为 200，table 组件默认为 0
+				},
+				parseData: function(res) { //res 即为原始返回的数据
+					console.log(res);
+					mySlider = res;
+					return {
+						"code": 200, //解析接口状态
+						"msg": res.msg, //解析提示文本
+						"count": 200, //解析数据长度
+						"data": res //解析数据列表
+					}
+				}
+			});
+
+			//监听工具条:行删除和修改
+			table.on('tool(slider)', function(obj) {
+				var data = obj.data;
+				var $ = layui.jquery;
+				shop_id = data.id; //图片上传需要
+				type = "recommend";
+				if (obj.event === 'detail') {
+					layer.msg('ID：' + data.id + ' 的查看操作');
+				} else if (obj.event === 'del') {
+					layer.confirm('真的删除行么', function(index) {
+						$.ajax({
+							type: "post",
+							url: "http://127.0.0.1:1010/api/slider_del.php",
+							data: {
+								'id': data.id
+							},
+							dataType: "text",
+							success: function(data) {
+								alert("删除成功");
+								obj.del();
+								layer.close(index);
+							}
+						});
+					})
+				} else if (obj.event === 'edit') {
+					// layer.alert('编辑行：<br>'+ JSON.stringify(data))
+					layer.open({
+						type: 2,
+						title: '编辑轮播图',
+						area: ['500px', '400px'] //宽高
+							,
+						shadeClose: false,
+						scrollbar: false // 父页面 滚动条 禁止
+							,
+						content: "./page/layer_window/slider_edit.html",
+						btn: ['提交', '取消']
+							// 获取初始数据填入表单
+							,
+						success: function(layero, index) {
+								//找到它的子窗口的body
+								var body = layer.getChildFrame('body', index); //巧妙的地方在这里哦
+								//为子窗口元素赋值
+								body.contents().find("#title").val(data.name);
+								body.contents().find("#image_shop").attr('src', "http://127.0.0.1:1010/"+data.name);
+								body.contents().find("#desc").val(data.desc);
+								body.contents().find("#price").val(data.price);
+							}
+							//提交操作
+							,
+						yes: function(index, layero) {
+							var body = layer.getChildFrame('body', index); //巧妙的地方在这里哦
+							var name = body.contents().find("#title").val();
+							var image = body.contents().find("#image_link").text();
+							var desc = body.contents().find("#desc").val();
+							var price = body.contents().find("#price").val();
+							$.ajax({
+								type: "post",
+								url: "http://127.0.0.1:1010/recommend_update.php",
+								data: {
+									'id': data.id,
+									'name': name,
+									'image': image,
+									'desc': desc,
+									'price': price
+								},
+								dataType: "text",
+								success: function(data) {
+									alert("编辑成功");
+									obj.del();
+									layer.close(index);
+									//执行重载
+									window.parent.location.reload();
+
+								}
+							});
+						},
+						btn2: function(index, layero) {
+							//按钮【按钮二】的回调
+							layer.close(index);
+							//return false 开启该代码可禁止点击该按钮关闭
+						},
+						cancel: function() {
+							//右上角关闭回调
+							//return false 开启该代码可禁止点击该按钮关闭
+						}
+					});
+				}
+			});
+
+
+		});
+	</script>
+	<script>
+		layui.use('tree', function() {
+			var $ = layui.jquery;
+			$("#add").on('click', function() {
+				var img = $('#slider_link_show').text();
+				console.log("123" + img);
+				if (img != "") {
+					$.ajax({
+						type: "post",
+						url: "http://127.0.0.1:1010/api/slider_insert.php",
+						data: {
+							'name': img
+						},
+						dataType: "text",
+						success: function(data) {
+							alert("添加成功" + img);
+							//执行重载
+							window.parent.location.reload();
+						}
+					});
+				} else {
+					alert("请先上传图片！");
+				}
+			})
+		});
+	</script>
+</html>
